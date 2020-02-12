@@ -1,6 +1,8 @@
 from room import Room
 from player import Player
+from items import Items
 import os
+import random
 
 # Declare all the rooms
 
@@ -24,6 +26,24 @@ earlier adventurers. The only exit is to the south."""),
 }
 
 
+room_items = {
+    "Grappling Hook": Items("Grappling Hook", "A deployable hook for crossing chasms", 0, 0, 0),
+    "Wooden Sword": Items("Wooden Sword", "...It's a pretty bad sword", 2, 0, 0),
+    "Sword": Items("Hero's Sword", "Now this is a sword", 8, 0,0),
+    "Shield": Items("Sturdy Shield", "A reliable shield", 0, 2, 0),
+    "Elixir": Items("Healing Elixir", "Soylent Green is people!", 0, 0, 10)
+}
+
+print(room_items["grappling_hook"])
+room["outside"].addInventory(random.choice(list(room_items.keys())))
+room["foyer"].addInventory(random.choice(list(room_items.keys())))
+room["overlook"].addInventory(random.choice(list(room_items.keys())))
+room["overlook"].addInventory(room_items["grappling_hook"].name)
+room["narrow"].addInventory(random.choice(list(room_items.keys())))
+room["treasure"].addInventory(random.choice(list(room_items.keys())))
+
+
+
 # Link rooms together
 
 room['outside'].n_to = room['foyer']
@@ -41,8 +61,8 @@ room['treasure'].s_to = room['narrow']
 print("       ~~~~~****WELCOME TO PURGATORY****~~~~~~")
 print("\"A game where you literally walk around purgatory\"(TM)(C)\n\n")
 # Make a new player object that is currently in the 'outside' room.
-np_name = input("What's your name?")
-new_player = Player(str(np_name),room['outside'])
+np_name = input("What's your name? ")
+new_player = Player(str(np_name),room['outside'],int(100),[])
 # print(new_player)
 
 # Write a loop that:
@@ -64,11 +84,13 @@ new_player = Player(str(np_name),room['outside'])
 while True: 
     location = new_player.room
     name = new_player.player
+    health = new_player.health
+    room_items = new_player.room.items
     # if (location != room['outside']):
     #     print("       ~~~~~****WELCOME TO PURGATORY****~~~~~~")
     #     print("\"A game where you literally walk around purgatory\"(TM)(C)\n\n")
 
-    print(f"Player: {name}\nCurrent Location: {location}\n\n")
+    print(f"Player: {name}\nHealth: {health}\nCurrent Location: {location}\nRoom Items: {room_items}")
     move = input(f"{name}, which direction would you like to travel? [options: (n)orth, (e)ast, (s)outh, (w)est]: ")
 
     if (move == 'n' and hasattr(location,'n_to') and location.n_to != None):

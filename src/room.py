@@ -6,9 +6,17 @@ class Room:
     def __init__(self, name, description):
         self.name = name
         self.description = description
+        self.items = []
     
     def __str__(self):
-        return f'\n Room name: {self.name} \n Description:\n {self.description}'
+        return f'\n Room name: {self.name} \n Description:\n {self.description}\n'
+    
+    def addInventory(self,item):
+        self.items.append(item)
+    
+    def removeInventory(self,item):
+        self.items.remove(item)
+
 
 
         
