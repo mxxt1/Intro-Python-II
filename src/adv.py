@@ -93,7 +93,7 @@ while True:
 
     print(f"\n\nPlayer: {name}\nHealth: {health}\nCurrent Location: {location}Room Items: {room_items}\n\n")
     move = input(f"{name}, what would you like to do? \n\nOptions: \n\nNavigation: (n)orth, (e)ast, (s)outh, (w)est \n\nActions: (v)iew inventory, (p)ick up item, (r)emove item \n\nYour Selection: ")
-
+    # Navigation
     if (move == 'n' and hasattr(location,'n_to') and location.n_to != None):
         new_player.room = new_player.room.n_to
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -106,6 +106,7 @@ while True:
     elif (move == 'w' and hasattr(location,'w_to') and location.w_to != False):
         new_player.room = new_player.room.w_to
         os.system('cls' if os.name == 'nt' else 'clear')
+    # Pick items
     elif(move == 'p'):
         if (len(room_items) > 1):
             count = int(0)
@@ -117,7 +118,7 @@ while True:
             print(room_items[int(itemInd)])
             new_player.addItem(room_items[int(itemInd)])
             location.removeInventory(room_items[int(itemInd)])
-            
+            os.system('cls' if os.name == 'nt' else 'clear')
         else:
             # print(room_items[0])
             item = str(room_items[0])
@@ -125,13 +126,24 @@ while True:
             location.removeInventory(item)
             os.system('cls' if os.name == 'nt' else 'clear')
     elif(move == 'v'):
+        os.system('cls' if os.name == 'nt' else 'clear')
         print(f'\n{name}\'s Inventory:')
         count = int(0)
         for item in inventory:
             print(f'{count} {item}')
             count += 1
-            
+        invAction = input(f'What would you like to do?\nOptions: (r)emove item, (n)othing\nYour selection: ')
+        if (invAction == 'r'):
+            os.system('cls' if os.name == 'nt' else 'clear')
+            invCount = int(0)
+            for item in inventory:
+                print(f'{invCount} {item}')
+                invCount += 1
+            selection = input(f'Which item would you like to remove? ')
+            new_player.removeItem(inventory[int(selection)])
+            os.system('cls' if os.name == 'nt' else 'clear')
+    #unconfigured inputs    
     else:
         os.system('cls' if os.name == 'nt' else 'clear')
-        print("\n!!*****YOU CAN'T GO THAT WAY, BUDDY.*****!!\n")
+        print("\n!!*****YOU CAN'T DO THAT, BUDDY.*****!!\n")
     
