@@ -34,11 +34,11 @@ room_items = {
     "Elixir": Items("Healing Elixir", "Soylent Green is people!", 0, 0, 10)
 }
 
-print(room_items["grappling_hook"])
+# print(room_items["grappling_hook"])
 room["outside"].addInventory(random.choice(list(room_items.keys())))
 room["foyer"].addInventory(random.choice(list(room_items.keys())))
 room["overlook"].addInventory(random.choice(list(room_items.keys())))
-room["overlook"].addInventory(room_items["grappling_hook"].name)
+room["overlook"].addInventory(room_items["Grappling Hook"].name)
 room["narrow"].addInventory(random.choice(list(room_items.keys())))
 room["treasure"].addInventory(random.choice(list(room_items.keys())))
 
@@ -86,12 +86,13 @@ while True:
     name = new_player.player
     health = new_player.health
     room_items = new_player.room.items
+    inventory = new_player.inventory
     # if (location != room['outside']):
     #     print("       ~~~~~****WELCOME TO PURGATORY****~~~~~~")
     #     print("\"A game where you literally walk around purgatory\"(TM)(C)\n\n")
 
-    print(f"Player: {name}\nHealth: {health}\nCurrent Location: {location}\nRoom Items: {room_items}")
-    move = input(f"{name}, which direction would you like to travel? [options: (n)orth, (e)ast, (s)outh, (w)est]: ")
+    print(f"\n\nPlayer: {name}\nHealth: {health}\nCurrent Location: {location}Room Items: {room_items}\n\n")
+    move = input(f"{name}, what would you like to do? \n\nOptions: \n\nNavigation: (n)orth, (e)ast, (s)outh, (w)est \n\nActions: (v)iew inventory, (p)ick up item, (r)emove item \n\nYour Selection: ")
 
     if (move == 'n' and hasattr(location,'n_to') and location.n_to != None):
         new_player.room = new_player.room.n_to
@@ -105,6 +106,31 @@ while True:
     elif (move == 'w' and hasattr(location,'w_to') and location.w_to != False):
         new_player.room = new_player.room.w_to
         os.system('cls' if os.name == 'nt' else 'clear')
+    elif(move == 'p'):
+        if (len(room_items) > 1):
+            count = int(0)
+            for item in room_items:
+                print(f'{count} {item}')
+                count += 1
+            print('\n\n')
+            itemInd = input(f'Which item would you like to select? ')
+            print(room_items[int(itemInd)])
+            new_player.addItem(room_items[int(itemInd)])
+            location.removeInventory(room_items[int(itemInd)])
+            
+        else:
+            # print(room_items[0])
+            item = str(room_items[0])
+            new_player.addItem(item)
+            location.removeInventory(item)
+            os.system('cls' if os.name == 'nt' else 'clear')
+    elif(move == 'v'):
+        print(f'\n{name}\'s Inventory:')
+        count = int(0)
+        for item in inventory:
+            print(f'{count} {item}')
+            count += 1
+            
     else:
         os.system('cls' if os.name == 'nt' else 'clear')
         print("\n!!*****YOU CAN'T GO THAT WAY, BUDDY.*****!!\n")

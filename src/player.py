@@ -12,4 +12,10 @@ class Player:
     def __str__(self):
         return f'Player name: {self.player}\nCurrent Room: {self.room}'
     
+    def addItem(self,item):
+        self.inventory.append(item)
+    
+    def removeItem(self,item):
+        self.inventory.remove(item)
+    
     
