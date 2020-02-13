@@ -60,10 +60,12 @@ room['treasure'].s_to = room['narrow']
 #
 print("       ~~~~~****WELCOME TO PURGATORY****~~~~~~")
 print("\"A game where you literally walk around purgatory\"(TM)(C)\n\n")
+
 # Make a new player object that is currently in the 'outside' room.
+
 np_name = input("What's your name? ")
 new_player = Player(str(np_name),room['outside'],int(100),[])
-# print(new_player)
+
 
 # Write a loop that:
 #
@@ -92,7 +94,7 @@ while True:
     #     print("\"A game where you literally walk around purgatory\"(TM)(C)\n\n")
 
     print(f"\n\nPlayer: {name}\nHealth: {health}\nCurrent Location: {location}Room Items: {room_items}\n\n")
-    move = input(f"{name}, what would you like to do? \n\nOptions: \n\nNavigation: (n)orth, (e)ast, (s)outh, (w)est \n\nActions: (v)iew inventory, (p)ick up item, (r)emove item \n\nYour Selection: ")
+    move = input(f"{name}, what would you like to do? \n\nOptions: \n\nNavigation: (n)orth, (e)ast, (s)outh, (w)est \n\nActions: (v)iew inventory, (p)ick up item, (r)emove item \n\nQuit: (q)uit\n\nYour Selection: ")
     # Navigation
     if (move == 'n' and hasattr(location,'n_to') and location.n_to != None):
         new_player.room = new_player.room.n_to
@@ -125,6 +127,7 @@ while True:
             new_player.addItem(item)
             location.removeInventory(item)
             os.system('cls' if os.name == 'nt' else 'clear')
+    # View and edit inventory
     elif(move == 'v'):
         os.system('cls' if os.name == 'nt' else 'clear')
         print(f'\n{name}\'s Inventory:')
@@ -142,6 +145,10 @@ while True:
             selection = input(f'Which item would you like to remove? ')
             new_player.removeItem(inventory[int(selection)])
             os.system('cls' if os.name == 'nt' else 'clear')
+    elif (move == 'q'):
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print(f'Thanks for playing, {name}')
+        break
     #unconfigured inputs    
     else:
         os.system('cls' if os.name == 'nt' else 'clear')
