@@ -25,7 +25,7 @@ chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 }
 
-
+# create items
 room_items = {
     "Grappling Hook": Items("Grappling Hook", "A deployable hook for crossing chasms", 0, 0, 0),
     "Wooden Sword": Items("Wooden Sword", "...It's a pretty bad sword", 2, 0, 0),
@@ -34,6 +34,7 @@ room_items = {
     "Elixir": Items("Healing Elixir", "Soylent Green is people!", 0, 0, 10)
 }
 
+# Randomize allocation to rooms (except make sure grappling is in overlook)
 # print(room_items["grappling_hook"])
 room["outside"].addInventory(random.choice(list(room_items.keys())))
 room["foyer"].addInventory(random.choice(list(room_items.keys())))
@@ -41,7 +42,6 @@ room["overlook"].addInventory(random.choice(list(room_items.keys())))
 room["overlook"].addInventory(room_items["Grappling Hook"].name)
 room["narrow"].addInventory(random.choice(list(room_items.keys())))
 room["treasure"].addInventory(random.choice(list(room_items.keys())))
-
 
 
 # Link rooms together
@@ -55,9 +55,12 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
+nav = ['n','e','s','w']
+
 #
 # Main
 #
+
 print("       ~~~~~****WELCOME TO PURGATORY****~~~~~~")
 print("\"A game where you literally walk around purgatory\"(TM)(C)\n\n")
 
@@ -83,32 +86,38 @@ new_player = Player(str(np_name),room['outside'],int(100),[])
 # do while true
 # conditional based on input check ._to based on current room
 
+def playerMove(move):
+    room = new_player.room
+    newRoom = f'{move}_to'
+    if (hasattr(room,newRoom) and getattr(room,newRoom) != None):
+        new_player.room = getattr(room,newRoom)
+        os.system('cls' if os.name == 'nt' else 'clear')
+    else:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print('You can\'t go that way, friend.')
+
 while True: 
     location = new_player.room
     name = new_player.player
     health = new_player.health
     room_items = new_player.room.items
     inventory = new_player.inventory
-    # if (location != room['outside']):
-    #     print("       ~~~~~****WELCOME TO PURGATORY****~~~~~~")
-    #     print("\"A game where you literally walk around purgatory\"(TM)(C)\n\n")
-
+  
     print(f"\n\nPlayer: {name}\nHealth: {health}\nCurrent Location: {location}Room Items: {room_items}\n\n")
-    move = input(f"{name}, what would you like to do? \n\nOptions: \n\nNavigation: (n)orth, (e)ast, (s)outh, (w)est \n\nActions: (v)iew inventory, (p)ick up item, (r)emove item \n\nQuit: (q)uit\n\nYour Selection: ")
-    # Navigation
-    if (move == 'n' and hasattr(location,'n_to') and location.n_to != None):
-        new_player.room = new_player.room.n_to
-        os.system('cls' if os.name == 'nt' else 'clear')
-    elif (move == 'e' and hasattr(location,'e_to') and location.e_to != False):
-        new_player.room = new_player.room.e_to
-        os.system('cls' if os.name == 'nt' else 'clear')
-    elif (move == 's' and hasattr(location,'s_to') and location.s_to != False):
-        new_player.room = new_player.room.s_to
-        os.system('cls' if os.name == 'nt' else 'clear')
-    elif (move == 'w' and hasattr(location,'w_to') and location.w_to != False):
-        new_player.room = new_player.room.w_to
-        os.system('cls' if os.name == 'nt' else 'clear')
+    move = input(f"{name}, what would you like to do? \n\nOptions: \n\nNavigation: (n)orth, (e)ast, (s)outh, (w)est \n\nActions: (v)iew inventory, (p)ick up item, ('get' ',' 'item'), (r)emove item \n\nQuit: (q)uit\n\nYour Selection: ")
+    move = move.lower()
+    # Navigation --> move this to player.py
+    if (move in nav):
+        playerMove(move)
     # Pick items
+    elif ("get" in move):
+        words = move.split(',',-1)
+        print(words)
+        if (words[0] in room_items):
+            item = str(words[0])
+            new_player.addItem(item)
+            location.removeInventory(item)
+            os.system('cls' if os.name == 'nt' else 'clear')
     elif(move == 'p'):
         if (len(room_items) > 1):
             count = int(0)
@@ -154,3 +163,17 @@ while True:
         os.system('cls' if os.name == 'nt' else 'clear')
         print("\n!!*****YOU CAN'T DO THAT, BUDDY.*****!!\n")
     
+
+
+# if (move == 'n' and hasattr(location,'n_to') and location.n_to != None):
+#         new_player.room = new_player.room.n_to
+#         os.system('cls' if os.name == 'nt' else 'clear')
+#     elif (move == 'e' and hasattr(location,'e_to') and location.e_to != None):
+#         new_player.room = new_player.room.e_to
+#         os.system('cls' if os.name == 'nt' else 'clear')
+#     elif (move == 's' and hasattr(location,'s_to') and location.s_to != None):
+#         new_player.room = new_player.room.s_to
+#         os.system('cls' if os.name == 'nt' else 'clear')
+#     elif (move == 'w' and hasattr(location,'w_to') and location.w_to != None):
+#         new_player.room = new_player.room.w_to
+#         os.system('cls' if os.name == 'nt' else 'clear')

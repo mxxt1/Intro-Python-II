@@ -7,9 +7,13 @@ class Room:
         self.name = name
         self.description = description
         self.items = []
+        self.n_to = None
+        self.e_to = None
+        self.w_to = None
+        self.s_to = None
     
     def __str__(self):
-        return f'\n Room name: {self.name} \n Description:\n {self.description}\n'
+        return f'\n Room name: {self.name} \n Description:\n {self.description}\n\n'
     
     def addInventory(self,item):
         self.items.append(item)
