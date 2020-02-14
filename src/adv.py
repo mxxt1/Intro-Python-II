@@ -27,11 +27,11 @@ earlier adventurers. The only exit is to the south."""),
 
 # create items
 room_items = {
-    "Grappling Hook": Items("Grappling Hook", "A deployable hook for crossing chasms", 0, 0, 0),
-    "Wooden Sword": Items("Wooden Sword", "...It's a pretty bad sword", 2, 0, 0),
-    "Sword": Items("Hero's Sword", "Now this is a sword", 8, 0,0),
-    "Shield": Items("Sturdy Shield", "A reliable shield", 0, 2, 0),
-    "Elixir": Items("Healing Elixir", "Soylent Green is people!", 0, 0, 10)
+    "hook": Items("Hook", "A deployable hook for crossing chasms", 0, 0, 0),
+    "sword": Items("Wooden Sword", "...It's a pretty bad sword", 2, 0, 0),
+    "broadsword": Items("Hero's Sword", "Now this is a sword", 8, 0,0),
+    "shield": Items("Sturdy Shield", "A reliable shield", 0, 2, 0),
+    "elixir": Items("Healing Elixir", "Soylent Green is people!", 0, 0, 10)
 }
 
 # Randomize allocation to rooms (except make sure grappling is in overlook)
@@ -39,7 +39,7 @@ room_items = {
 room["outside"].addInventory(random.choice(list(room_items.keys())))
 room["foyer"].addInventory(random.choice(list(room_items.keys())))
 room["overlook"].addInventory(random.choice(list(room_items.keys())))
-room["overlook"].addInventory(room_items["Grappling Hook"].name)
+room["overlook"].addInventory(room_items["hook"].name)
 room["narrow"].addInventory(random.choice(list(room_items.keys())))
 room["treasure"].addInventory(random.choice(list(room_items.keys())))
 
@@ -100,10 +100,10 @@ while True:
     location = new_player.room
     name = new_player.player
     health = new_player.health
-    room_items = new_player.room.items
+    items = new_player.room.items
     inventory = new_player.inventory
   
-    print(f"\n\nPlayer: {name}\nHealth: {health}\nCurrent Location: {location}Room Items: {room_items}\n\n")
+    print(f"\n\nPlayer: {name}\nHealth: {health}\nCurrent Location: {location}Room Items: {items}\n\n")
     move = input(f"{name}, what would you like to do? \n\nOptions: \n\nNavigation: (n)orth, (e)ast, (s)outh, (w)est \n\nActions: (v)iew inventory, (p)ick up item, ('get' ',' 'item'), (r)emove item \n\nQuit: (q)uit\n\nYour Selection: ")
     move = move.lower()
     # Navigation --> move this to player.py
@@ -111,31 +111,37 @@ while True:
         playerMove(move)
     # Pick items
     elif ("get" in move):
-        words = move.split(',',-1)
+        words = move.split(' ',-1)
         print(words)
-        if (words[0] in room_items):
-            item = str(words[0])
+        print(room_items[f'{words[1]}'].name)
+        if (words[1] in items):
+            item = str(words[1])
             new_player.addItem(item)
             location.removeInventory(item)
             os.system('cls' if os.name == 'nt' else 'clear')
     elif(move == 'p'):
         if (len(room_items) > 1):
             count = int(0)
-            for item in room_items:
+            for item in items:
                 print(f'{count} {item}')
                 count += 1
             print('\n\n')
             itemInd = input(f'Which item would you like to select? ')
-            print(room_items[int(itemInd)])
-            new_player.addItem(room_items[int(itemInd)])
-            location.removeInventory(room_items[int(itemInd)])
+            print(items[int(itemInd)])
+            new_player.addItem(items[int(itemInd)])
+            location.removeInventory(items[int(itemInd)])
             os.system('cls' if os.name == 'nt' else 'clear')
+            room_items[item].onTake(item)
+            room_items[item].onTake(f'{item}')
         else:
             # print(room_items[0])
             item = str(room_items[0])
             new_player.addItem(item)
             location.removeInventory(item)
+            room_items[item].onTake(f'{item}')
             os.system('cls' if os.name == 'nt' else 'clear')
+            room_items[item].onTake(item)
+            room_items[item].onTake(f'{item}')
     # View and edit inventory
     elif(move == 'v'):
         os.system('cls' if os.name == 'nt' else 'clear')
