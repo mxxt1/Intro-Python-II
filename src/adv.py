@@ -27,7 +27,7 @@ earlier adventurers. The only exit is to the south."""),
 
 # create items
 room_items = {
-    "hook": Items("Hook", "A deployable hook for crossing chasms", 0, 0, 0),
+    "hook": Items("hook", "A deployable hook for crossing chasms", 0, 0, 0),
     "sword": Items("Wooden Sword", "...It's a pretty bad sword", 2, 0, 0),
     "broadsword": Items("Hero's Sword", "Now this is a sword", 8, 0,0),
     "shield": Items("Sturdy Shield", "A reliable shield", 0, 2, 0),
@@ -112,13 +112,12 @@ while True:
     # Pick items
     elif ("get" in move):
         words = move.split(' ',-1)
-        print(words)
-        print(room_items[f'{words[1]}'].name)
         if (words[1] in items):
             item = str(words[1])
             new_player.addItem(item)
             location.removeInventory(item)
             os.system('cls' if os.name == 'nt' else 'clear')
+            room_items[item].onTake(item)
     elif(move == 'p'):
         if (len(room_items) > 1):
             count = int(0)
@@ -169,17 +168,3 @@ while True:
         os.system('cls' if os.name == 'nt' else 'clear')
         print("\n!!*****YOU CAN'T DO THAT, BUDDY.*****!!\n")
     
-
-
-# if (move == 'n' and hasattr(location,'n_to') and location.n_to != None):
-#         new_player.room = new_player.room.n_to
-#         os.system('cls' if os.name == 'nt' else 'clear')
-#     elif (move == 'e' and hasattr(location,'e_to') and location.e_to != None):
-#         new_player.room = new_player.room.e_to
-#         os.system('cls' if os.name == 'nt' else 'clear')
-#     elif (move == 's' and hasattr(location,'s_to') and location.s_to != None):
-#         new_player.room = new_player.room.s_to
-#         os.system('cls' if os.name == 'nt' else 'clear')
-#     elif (move == 'w' and hasattr(location,'w_to') and location.w_to != None):
-#         new_player.room = new_player.room.w_to
-#         os.system('cls' if os.name == 'nt' else 'clear')
