@@ -61,13 +61,7 @@ nav = ['n','e','s','w']
 # Main
 #
 
-print("       ~~~~~****WELCOME TO PURGATORY****~~~~~~")
-print("\"A game where you literally walk around purgatory\"(TM)(C)\n\n")
-
 # Make a new player object that is currently in the 'outside' room.
-
-np_name = input("What's your name? ")
-new_player = Player(str(np_name),room['outside'],int(100),[])
 
 
 # Write a loop that:
@@ -86,85 +80,3 @@ new_player = Player(str(np_name),room['outside'],int(100),[])
 # do while true
 # conditional based on input check ._to based on current room
 
-def playerMove(move):
-    room = new_player.room
-    newRoom = f'{move}_to'
-    if (hasattr(room,newRoom) and getattr(room,newRoom) != None):
-        new_player.room = getattr(room,newRoom)
-        os.system('cls' if os.name == 'nt' else 'clear')
-    else:
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print('You can\'t go that way, friend.')
-
-while True: 
-    location = new_player.room
-    name = new_player.player
-    health = new_player.health
-    items = new_player.room.items
-    inventory = new_player.inventory
-  
-    print(f"\n\nPlayer: {name}\nHealth: {health}\nCurrent Location: {location}Room Items: {items}\n\n")
-    move = input(f"{name}, what would you like to do? \n\nOptions: \n\nNavigation: (n)orth, (e)ast, (s)outh, (w)est \n\nActions: (v)iew inventory, (p)ick up item, ('get' ',' 'item'), (r)emove item \n\nQuit: (q)uit\n\nYour Selection: ")
-    move = move.lower()
-    # Navigation --> move this to player.py
-    if (move in nav):
-        playerMove(move)
-    # Pick items
-    elif ("get" in move):
-        words = move.split(' ',-1)
-        if (words[1] in items):
-            item = str(words[1])
-            new_player.addItem(item)
-            location.removeInventory(item)
-            os.system('cls' if os.name == 'nt' else 'clear')
-            room_items[item].onTake(item)
-    elif(move == 'p'):
-        if (len(room_items) > 1):
-            count = int(0)
-            for item in items:
-                print(f'{count} {item}')
-                count += 1
-            print('\n\n')
-            itemInd = input(f'Which item would you like to select? ')
-            print(items[int(itemInd)])
-            new_player.addItem(items[int(itemInd)])
-            location.removeInventory(items[int(itemInd)])
-            os.system('cls' if os.name == 'nt' else 'clear')
-            room_items[item].onTake(item)
-            room_items[item].onTake(f'{item}')
-        else:
-            # print(room_items[0])
-            item = str(room_items[0])
-            new_player.addItem(item)
-            location.removeInventory(item)
-            room_items[item].onTake(f'{item}')
-            os.system('cls' if os.name == 'nt' else 'clear')
-            room_items[item].onTake(item)
-            room_items[item].onTake(f'{item}')
-    # View and edit inventory
-    elif(move == 'v'):
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print(f'\n{name}\'s Inventory:')
-        count = int(0)
-        for item in inventory:
-            print(f'{count} {item}')
-            count += 1
-        invAction = input(f'What would you like to do?\nOptions: (r)emove item, (n)othing\nYour selection: ')
-        if (invAction == 'r'):
-            os.system('cls' if os.name == 'nt' else 'clear')
-            invCount = int(0)
-            for item in inventory:
-                print(f'{invCount} {item}')
-                invCount += 1
-            selection = input(f'Which item would you like to remove? ')
-            new_player.removeItem(inventory[int(selection)])
-            os.system('cls' if os.name == 'nt' else 'clear')
-    elif (move == 'q'):
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print(f'Thanks for playing, {name}')
-        break
-    #unconfigured inputs    
-    else:
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print("\n!!*****YOU CAN'T DO THAT, BUDDY.*****!!\n")
-    
