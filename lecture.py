@@ -24,5 +24,14 @@ class Store:
         self.categories = categories
         self.employees = []
     
-    def __
+    def __str__(self):
+        return f'name is {self.name}, categories are {self.categories} and employees are {self.employees}'
         
+
+
+
+sports_store = Store("matt's store",["football","basketball","baseball"]), ["test"]
+
+print(sports_store)
+
+
