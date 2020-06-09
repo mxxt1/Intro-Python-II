@@ -26,6 +26,9 @@ class Store:
     
     def __str__(self):
         return f'name is {self.name}, categories are {self.categories} and employees are {self.employees}'
+    
+    def __repr__(self):
+        return f'self.name = {self.name} ; categories = {self.categories}'
         
 
 
@@ -33,5 +36,9 @@ class Store:
 sports_store = Store("matt's store",["football","basketball","baseball"]), ["test"]
 
 print(sports_store)
+
+
+# REPL <-- Read evaluate print loop
+# 
 
 
