@@ -1,6 +1,5 @@
 from room import Room
 from player import Player
-from items import Items
 import os
 import random
 
@@ -26,22 +25,10 @@ earlier adventurers. The only exit is to the south."""),
 }
 
 # create items
-room_items = {
-    "hook": Items("hook", "A deployable hook for crossing chasms", 0, 0, 0),
-    "sword": Items("Wooden Sword", "...It's a pretty bad sword", 2, 0, 0),
-    "broadsword": Items("Hero's Sword", "Now this is a sword", 8, 0,0),
-    "shield": Items("Sturdy Shield", "A reliable shield", 0, 2, 0),
-    "elixir": Items("Healing Elixir", "Soylent Green is people!", 0, 0, 10)
-}
+
 
 # Randomize allocation to rooms (except make sure grappling is in overlook)
 # print(room_items["grappling_hook"])
-room["outside"].addInventory(random.choice(list(room_items.keys())))
-room["foyer"].addInventory(random.choice(list(room_items.keys())))
-room["overlook"].addInventory(random.choice(list(room_items.keys())))
-room["overlook"].addInventory(room_items["hook"].name)
-room["narrow"].addInventory(random.choice(list(room_items.keys())))
-room["treasure"].addInventory(random.choice(list(room_items.keys())))
 
 
 # Link rooms together
@@ -63,6 +50,9 @@ nav = ['n','e','s','w']
 
 # Make a new player object that is currently in the 'outside' room.
 
+new_name = input("What is your name? ")
+new_player = Player(str(new_name),room['outside'], 100, [])
+print(new_player)
 
 # Write a loop that:
 #
@@ -79,4 +69,26 @@ nav = ['n','e','s','w']
 # 
 # do while true
 # conditional based on input check ._to based on current room
+
+def player_moves(move):
+    #assign current room
+    room = new_player.room
+    # new_room = whatever the room represented by {move}
+    #check if the room has the attribute --> can you make the move?
+        #if the move is allowed update the room in the player object to the new room 
+        #else if the move is not allowed, don't change object, print message
+
+while True:
+    room = new_player.room
+    name = new_player.name
+    health = new_player.health
+    inventory = new_player.inventory
+
+
+    print(f"\nPlayer: {name}\n{room}\nHealth: {health}\nInventory: {inventory}")
+    move = input(f"")
+
+
+
+
 
