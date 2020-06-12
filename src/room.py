@@ -10,8 +10,13 @@ class Room:
         self.e_to = None
         self.s_to = None
         self.w_to = None
+        self.items = []
 
     def __str__(self):
-        return f'\nRoom: {self.name}\nRoom Description: {self.description}\n'
-
-        
+        return f'\nRoom: {self.name}\nRoom Description: {self.description}\nAvailable Items: {self.items}'
+    
+    def addItem(self,item):
+        self.items.append(item)
+    
+    def removeItem(self,item):
+        self.items.remove(item)
