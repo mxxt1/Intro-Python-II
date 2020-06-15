@@ -13,10 +13,10 @@ class Room:
         self.items = []
 
     def __str__(self):
-        return f'\nRoom: {self.name}\nRoom Description: {self.description}\nAvailable Items: {self.items}'
+        return f'\nRoom: {self.name}\nRoom Description: {self.description}\n'
     
-    def addItem(self,item):
+    def addInventory(self,item):
         self.items.append(item)
     
-    def removeItem(self,item):
+    def removeInventory(self,item):
         self.items.remove(item)

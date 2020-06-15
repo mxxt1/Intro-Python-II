@@ -2,8 +2,8 @@
 # currently.
 
 class Player:
-    def __init__(self, name, room, health, inventory=[]):
-        self.name = name
+    def __init__(self, player, room, health, inventory=[]):
+        self.player = player
         self.room = room
         self.health = health
         self.inventory = inventory

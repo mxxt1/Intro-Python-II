@@ -39,12 +39,12 @@ room_items = {
 # Randomize allocation to rooms (except make sure grappling is in overlook)
 # print(room_items["grappling_hook"])
 
-room["outside"].addItem(random.choice(list(room_items.keys())))
-room["foyer"].addItem(random.choice(list(room_items.keys())))
-room["overlook"].addItem(random.choice(list(room_items.keys())))
-room["overlook"].addItem(room_items["hook"].name)
-room["narrow"].addItem(random.choice(list(room_items.keys())))
-room["treasure"].addItem(random.choice(list(room_items.keys())))
+room["outside"].addInventory(random.choice(list(room_items.keys())))
+room["foyer"].addInventory(random.choice(list(room_items.keys())))
+room["overlook"].addInventory(random.choice(list(room_items.keys())))
+room["overlook"].addInventory(room_items["hook"].name)
+room["narrow"].addInventory(random.choice(list(room_items.keys())))
+room["treasure"].addInventory(random.choice(list(room_items.keys())))
 
 
 # Link rooms together
@@ -88,54 +88,85 @@ new_player = Player(str(new_name),room['outside'], 100, [])
 # do while true
 # conditional based on input check ._to based on current room
 
-# def player_moves(move):
-#     #assign current room
-#     room = new_player.room
-#     # new_room = whatever the room represented by {move}
-#     #check if the room has the attribute --> can you make the move?
-#         #if the move is allowed update the room in the player object to the new room 
-#         #else if the move is not allowed, don't change object, print message
-
-def clearTerminal():
-    return os.system('cls' if os.name == 'nt' else 'clear')
-
-
-while True:
+def playerMove(move):
     room = new_player.room
-    name = new_player.name
+    newRoom = f'{move}_to'
+    if (hasattr(room,newRoom) and getattr(room,newRoom) != None):
+        new_player.room = getattr(room,newRoom)
+        os.system('cls' if os.name == 'nt' else 'clear')
+    else:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print('You can\'t go that way, friend.')
+
+while True: 
+    location = new_player.room
+    name = new_player.player
     health = new_player.health
+    items = new_player.room.items
     inventory = new_player.inventory
-    room_items = new_player.room.items
-
-
-    print(new_player)
-    move = input(f"\n\nWhat would you like to do, {name}?\nNavigation: (n)orth, (e)ast, (s)outh, (w)est\nActions: type 'get [item]' or 'drop [item]'\nExit: q\n\n\nEnter selection: ")
-    #Navigation
-    if move.lower() in nav:
-        newRoom = f'{move}_to'
-        if hasattr(room,newRoom) and getattr(room,newRoom) != None:
-            new_player.room = getattr(room,newRoom)
-            clearTerminal()
+  
+    print(f"\n\nPlayer: {name}\nHealth: {health}\nCurrent Location: {location}Room Items: {items}\n\n")
+    move = input(f"{name}, what would you like to do? \n\nOptions: \n\nNavigation: (n)orth, (e)ast, (s)outh, (w)est \n\nActions: (v)iew inventory, (p)ick up item, ('get' ',' 'item'), (r)emove item \n\nQuit: (q)uit\n\nYour Selection: ")
+    move = move.lower()
+    # Navigation --> move this to player.py
+    if (move in nav):
+        playerMove(move)
+    # Pick items
+    elif ("get" in move):
+        words = move.split(' ',-1)
+        if (words[1] in items):
+            item = str(words[1])
+            new_player.addItem(item)
+            location.removeInventory(item)
+            os.system('cls' if os.name == 'nt' else 'clear')
+            room_items[item].onTake(item)
+    elif(move == 'p'):
+        if (len(room_items) > 1):
+            count = int(0)
+            for item in items:
+                print(f'{count} {item}')
+                count += 1
+            print('\n\n')
+            itemInd = input(f'Which item would you like to select? ')
+            print(items[int(itemInd)])
+            new_player.addItem(items[int(itemInd)])
+            location.removeInventory(items[int(itemInd)])
+            os.system('cls' if os.name == 'nt' else 'clear')
+            room_items[item].onTake(item)
+            room_items[item].onTake(f'{item}')
         else:
-            clearTerminal()
-            print("You cannot go that way\n\n")
-    elif ('get' in str(move).lower()):
-        words = move.lower().split()
-        if words[1] in room_items:
-            activeItem = str(words[1])
-            room.removeItem(words[1])
-            new_player.addItem(words[1])
-            clearTerminal()
-        else:
-            clearTerminal()
-            print(f'\n\nSorry, there is no {words[1]} in {room.name}\n\n')
-    elif ('drop' in str(move).lower()):
-        words = move.lower().split()
-        if words[1] in inventory:
-            room.addItem(words[1])
-            new_player.removeItem(words[1])
-            clearTerminal()
+            # print(room_items[0])
+            item = str(room_items[0])
+            new_player.addItem(item)
+            location.removeInventory(item)
+            room_items[item].onTake(f'{item}')
+            os.system('cls' if os.name == 'nt' else 'clear')
+            room_items[item].onTake(item)
+            room_items[item].onTake(f'{item}')
+    # View and edit inventory
+    elif(move == 'v'):
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print(f'\n{name}\'s Inventory:')
+        count = int(0)
+        for item in inventory:
+            print(f'{count} {item}')
+            count += 1
+        invAction = input(f'What would you like to do?\nOptions: (r)emove item, (n)othing\nYour selection: ')
+        if (invAction == 'r'):
+            os.system('cls' if os.name == 'nt' else 'clear')
+            invCount = int(0)
+            for item in inventory:
+                print(f'{invCount} {item}')
+                invCount += 1
+            selection = input(f'Which item would you like to remove? ')
+            new_player.removeItem(inventory[int(selection)])
+            os.system('cls' if os.name == 'nt' else 'clear')
     elif (move == 'q'):
-        clearTerminal()
-        print(f'Thanks for playing, {name}\n\n\n\n')
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print(f'Thanks for playing, {name}')
         break
+    #unconfigured inputs    
+    else:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("\n!!*****YOU CAN'T DO THAT, BUDDY.*****!!\n")
+    

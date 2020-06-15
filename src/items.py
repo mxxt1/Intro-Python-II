@@ -9,10 +9,10 @@ class Items:
     def __str__(self):
         return f"Item Name: {self.name}\nDescription: {self.description}"
     
-    def take(self):
+    def onTake(self, name):
         return print(f'You have picked up {self.name}')
     
-    def drop(self):
+    def onDrop(self):
         return print(f'You have dropped {self.name}')
     
 
